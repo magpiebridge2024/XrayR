@@ -220,6 +220,13 @@ func (d *DefaultDispatcher) getLink(ctx context.Context) (*transport.Link, *tran
 				}
 			}
 		}
+		if p.Stats.UserOnline {
+			name := "user>>>" + user.Email + ">>>online"
+			if om, _ := stats.GetOrRegisterOnlineMap(d.stats, name); om != nil {
+				userIP := sessionInbound.Source.Address.String()
+				om.AddIP(userIP)
+			}
+		}
 	}
 
 	return inboundLink, outboundLink, nil
